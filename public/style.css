@@ -1,0 +1,38 @@
+* {
+  padding:0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Avenir', sans-serif;
+}
+
+main {
+  padding: 60px;
+  display: flex;
+  justify-content: center;
+}
+
+#currently-playing {
+  margin-bottom: 60px;
+}
+
+.wrapper {
+  padding: 0 60px;
+  width: 45%;
+}
+
+.track {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.track p {
+  margin: 10px 0 ;
+}
+
+.playing-now {
+  margin-top: 20px;
+}
