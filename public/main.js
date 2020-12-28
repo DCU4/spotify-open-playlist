@@ -4,7 +4,8 @@ let results = document.querySelector('#search-results');
 let currentlyPlaying = document.querySelector('#currently-playing');
 let isPlaying = false;
 let controls = document.querySelector('#controls');
-
+// let baseUrl = 'http://localhost:8080';
+let baseUrl = 'https://spotify-dc-app.herokuapp.com'
 
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -52,7 +53,8 @@ recognition.onresult = function(event) {
 
 // functions
 function searchSpotify(searchTerm) {
-  fetch('http://localhost:8080/search',{
+
+  fetch(`${baseUrl}/search`,{
     method: 'POST',
     headers: {
       "Content-Type":'application/json'
@@ -96,7 +98,7 @@ function searchSpotify(searchTerm) {
 
 function getCurrentlyPlaying() {
   let url = 'https://api.spotify.com/v1/me/player/currently-playing?market=US'
-  fetch('http://localhost:8080/currently-playing', {
+  fetch(`${baseUrl}/currently-playing`, {
     method: 'POST',
     headers: {
       "Content-Type":'application/json'
@@ -151,7 +153,7 @@ function getPlaylist() {
 
 function playSong() {
   let url = 'https://api.spotify.com/v1/me/player/play';
-  fetch('http://localhost:8080/play', {
+  fetch(`${baseUrl}/play`, {
     method: 'POST',
     headers: {
       "Content-Type":'application/json'
@@ -170,7 +172,7 @@ function playSong() {
 
 function pauseSong() {
   let url = 'https://api.spotify.com/v1/me/player/pause';
-  fetch('http://localhost:8080/pause', {
+  fetch(`${baseUrl}/pause`, {
     method: 'POST',
     headers: {
       "Content-Type":'application/json'
@@ -190,7 +192,7 @@ function pauseSong() {
 function addToQueue(e) {
   let uri = e.currentTarget.parentElement.id;
   let url = `https://api.spotify.com/v1/me/player/queue?uri=${uri}`;
-  fetch('http://localhost:8080/add-to-queue', {
+  fetch(`${baseUrl}/add-to-queue`, {
     method: 'POST',
     headers: {
       "Content-Type":'application/json'
