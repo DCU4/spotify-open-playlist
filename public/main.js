@@ -86,7 +86,8 @@ function searchSpotify(searchTerm) {
       btn.addEventListener('click', addToQueue);
     });
 
-    // TODO: add song to playlist
+  // TODO: add song to REQ playlist
+
     
   })
   .catch(err=> console.log(err));
@@ -140,6 +141,13 @@ function getCurrentlyPlaying() {
   .catch(err=> console.log(err));
   
 }
+
+
+function getPlaylist() {
+
+}
+
+
 
 function playSong() {
   let url = 'https://api.spotify.com/v1/me/player/play';

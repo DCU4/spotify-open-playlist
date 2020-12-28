@@ -19,11 +19,11 @@ app.use(express.static('public'));
 app.get('/', function (req, res, next) {
   if (res.statusCode === 200) {
     res.render('index');
-    authenticate()
-      .then(response => {
-        access_token = response.data.access_token;
-      })
-      .catch(err => console.log('errorrrr', err))
+    // authenticate()
+    //   .then(response => {
+    //     access_token = response.data.access_token;
+    //   })
+    //   .catch(err => console.log('errorrrr', err))
   } else {
     res.status(404);
   }
@@ -176,6 +176,8 @@ app.post('/add-to-queue', function(req, res) {
 
 
 // add to REQ playlist
+
+
 
 
 
