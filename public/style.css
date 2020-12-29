@@ -9,18 +9,20 @@ body {
 }
 
 main {
-  padding: 60px;
-  display: flex;
-  justify-content: center;
+  width: 80%;
+  margin: 30px auto;
 }
 
-#currently-playing {
-  margin-bottom: 60px;
+h4 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.wrapper {
-  padding: 0 60px;
-  width: 45%;
+.box {
+  padding: 40px;
+  margin-bottom: 20px;
+  border: 1px solid #DDD;
+  border-radius: 5px;
 }
 
 .track {
@@ -35,4 +37,10 @@ main {
 
 .playing-now {
   margin-top: 20px;
+}
+
+#currently-playing,
+#search-box {
+  height: 200px;
+  overflow: scroll;
 }
