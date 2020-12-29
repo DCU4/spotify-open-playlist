@@ -6,8 +6,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const client_id = '170a54b9cf114d8fa1b61666ab9af230';
 const secret = '9e07afeec7354865b085e4405a0a8e55';
-// const redirect_uri = 'http://localhost:8080/callback/';
-const redirect_uri = 'https://spotify-dc-app.herokuapp.com/callback/';
+const redirect_uri = 'http://localhost:8080/callback/';
+// const redirect_uri = 'https://spotify-dc-app.herokuapp.com/callback/';
 let refresh_token = '';
 
 app.use(cors());
@@ -20,11 +20,6 @@ app.use(express.static('public'));
 app.get('/', function (req, res, next) {
   if (res.statusCode === 200) {
     res.render('index');
-    // authenticate()
-    //   .then(response => {
-    //     access_token = response.data.access_token;
-    //   })
-    //   .catch(err => console.log('errorrrr', err))
   } else {
     res.status(404);
   }
@@ -34,7 +29,7 @@ app.get('/', function (req, res, next) {
 app.get('/login', function (req, res, next) {
   if (res.statusCode === 200) {
     res.writeHead(302, {
-      Location: `https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=code&redirect_uri=${redirect_uri}&scope=user-read-private user-read-email user-read-currently-playing user-modify-playback-state`
+      Location: `https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=code&redirect_uri=${redirect_uri}&scope=user-read-private user-read-email user-read-currently-playing user-modify-playback-state user-read-playback-state`
     });
     res.send();
   } else {
@@ -53,9 +48,8 @@ app.get('/callback', function (req, res, next) {
         .then(response => {
           let token = response.data.access_token;
           refresh_token = response.data.refresh_token;
-          spotifyAPICall(token, 'https://api.spotify.com/v1/me', 'GET')
+          spotifyAPICall(token, 'https://api.spotify.com/v1/me/player/devices', 'GET')
             .then(data => {
-              console.log(data.data);
               res.render('index', { data: data.data });
             })
             .catch(err => console.log('spotify err', err.response));
@@ -68,9 +62,8 @@ app.get('/callback', function (req, res, next) {
       spotifyRefresh(refresh_token)
         .then(response => {
           let token = response.data.access_token;
-          spotifyAPICall(token, 'https://api.spotify.com/v1/me', 'GET')
+          spotifyAPICall(token, 'https://api.spotify.com/v1/me/player/devices', 'GET')
             .then(data => {
-              console.log(data.data);
               res.render('index', { data: data.data });
             })
             .catch(err => console.log('spotify err', err.response.data));
@@ -118,7 +111,7 @@ app.post('/currently-playing', function (req, res) {
   let url = req.body.url;
   if (res.statusCode === 200) {
 
-    spotifyAuthAndRefresh(refresh_token, url, 'GET', res);
+    spotifyAuthAndRefreshData(refresh_token, url, 'GET', res);
 
   } else {
     res.status(404);
@@ -131,7 +124,7 @@ app.post('/play', function (req, res) {
 
   if (res.statusCode === 200) {
 
-    spotifyAuthAndRefresh(refresh_token, url, 'PUT', res);
+    spotifyAuthAndRefreshPlayer(refresh_token, url, 'PUT', res);
 
   } else {
     res.status(404);
@@ -145,7 +138,7 @@ app.post('/pause', function (req, res) {
 
   if (res.statusCode === 200) {
 
-    spotifyAuthAndRefresh(refresh_token, url, 'PUT', res);
+    spotifyAuthAndRefreshPlayer(refresh_token, url, 'PUT', res);
 
   } else {
     res.status(404);
@@ -159,7 +152,7 @@ app.post('/add-to-queue', function(req, res) {
 
   if (res.statusCode === 200) {
 
-    spotifyAuthAndRefresh(refresh_token, url, 'POST', res);
+    spotifyAuthAndRefreshData(refresh_token, url, 'POST', res);
 
   } else {
     res.status(404);
@@ -169,8 +162,19 @@ app.post('/add-to-queue', function(req, res) {
 
 
 
-
 // get REQ playlist
+app.post('/get-playlist', function(req, res) {
+  let url = req.body.url;
+
+  if (res.statusCode === 200) {
+
+    spotifyAuthAndRefreshData(refresh_token, url, 'GET', res);
+
+  } else {
+    res.status(404);
+  }
+
+});
 
 
 
@@ -186,7 +190,7 @@ app.post('/add-to-queue', function(req, res) {
 
 // functions
 
-function spotifyAuthAndRefresh(refresh_token, url, method, res) {
+function spotifyAuthAndRefreshPlayer(refresh_token, url, method, res) {
   if (refresh_token == '') {
 
     // auth
@@ -221,6 +225,40 @@ function spotifyAuthAndRefresh(refresh_token, url, method, res) {
                 res.json(data.data);
               })
               .catch(err => console.log('spotify player err', err));
+          })
+          .catch(err => console.log('spotify err', err));
+      })
+      .catch(err => console.log('callback err', err));
+
+  }
+}
+
+
+function spotifyAuthAndRefreshData(refresh_token, url, method, res) {
+  if (refresh_token == '') {
+
+    // auth
+    spotifyAuthorization(code)
+      .then(response => {
+        let token = response.data.access_token;
+        refresh_token = response.data.refresh_token;
+        spotifyAPICall(token, url, method)
+          .then(data => {
+            res.json(data.data);
+          })
+          .catch(err => console.log('spotify err', err));
+      })
+      .catch(err => console.log('callback err', err));
+
+  } else {
+
+    // refresh
+    spotifyRefresh(refresh_token)
+      .then(response => {
+        let token = response.data.access_token;
+        spotifyAPICall(token, url, method)
+          .then(data => {
+            res.json(data.data);
           })
           .catch(err => console.log('spotify err', err));
       })
