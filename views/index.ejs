@@ -13,23 +13,25 @@
 
   <main>
     <div class="wrapper">
-      <div id="currently-playing">
-        <p id="controls">Play</p>
-        <p>Currently listening to:</p>
+      <h4>This is REQ</h4>
+      <div class="box" id="currently-playing">
+        <!-- <p id="controls">Play</p> -->
+        <strong>Currently Playing</strong>
       </div>
-      <div id="queue">
-        <p>Dylan's Queue</p>
+      <div class="box" id="queue">
+        <strong>Next Up</strong>
         
+      </div>
+      <div class="box" id="search-box">
+        <strong>Search Spotify and Add</strong>
+        <form id="search-form">
+          <input name="q" type="search"/>
+        </form>
+        <div id="search-results"></div>
       </div>
     </div>
 
-    <div class="search-wrapper wrapper">
-      <p>Search spotify:</p>
-      <form id="search-form">
-        <input name="q" type="search"/>
-      </form>
-      <div id="search-results"></div>
-    </div>
+    
   </main>
   <script src="/main.js"></script>
 </body>
