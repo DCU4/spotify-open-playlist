@@ -2,10 +2,11 @@ console.log('main.js');
 let searchForm = document.querySelector('#search-form');
 let results = document.querySelector('#search-results');
 let currentlyPlaying = document.querySelector('#currently-playing');
+let queue = document.querySelector('#queue');
 let isPlaying = false;
 let controls = document.querySelector('#controls');
-// let baseUrl = 'http://localhost:8080';
-let baseUrl = 'https://spotify-dc-app.herokuapp.com'
+let baseUrl = 'http://localhost:8080';
+// let baseUrl = 'https://spotify-dc-app.herokuapp.com'
 
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -14,18 +15,21 @@ searchForm.addEventListener('submit', (e) => {
 
 });
 
+window.onload = () => {
+  getCurrentlyPlaying();
+  getPlaylist();
+}
 
-getCurrentlyPlaying();
 
-controls.addEventListener('click', () => {
-  if (isPlaying) {
-    controls.innerText = 'Play';
-    pauseSong();
-  } else {
-    controls.innerText = 'Pause';
-    playSong();
-  }
-});
+// controls.addEventListener('click', () => {
+//   if (isPlaying) {
+//     controls.innerText = 'Play';
+//     pauseSong();
+//   } else {
+//     controls.innerText = 'Pause';
+//     playSong();
+//   }
+// });
 
 // voice event for search
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -33,7 +37,7 @@ const recognition = new SpeechRecognition();
 recognition.lang = 'en-US';
 recognition.interimResults = false;
 recognition.continuous = true;
-recognition.start();
+// recognition.start();
 
 recognition.onresult = function(event) {
   
@@ -133,11 +137,11 @@ function getCurrentlyPlaying() {
 
     currentlyPlaying.insertAdjacentHTML('beforeend', html);
 
-    if (isPlaying) {
-      controls.innerText = 'Pause';
-    } else {
-      controls.innerText = 'Play';
-    }
+    // if (isPlaying) {
+    //   controls.innerText = 'Pause';
+    // } else {
+    //   controls.innerText = 'Play';
+    // }
 
   })
   .catch(err=> console.log(err));
@@ -146,9 +150,34 @@ function getCurrentlyPlaying() {
 
 
 function getPlaylist() {
+  let url = 'https://api.spotify.com/v1/playlists/4wh4DEEfm4QqLYXn3E5G0s';
+  fetch(`${baseUrl}/get-playlist`, {
+    method: 'POST',
+    headers: {
+      "Content-Type":'application/json'
+    },
+    body: JSON.stringify({url:url})
+  })
+  .then(res => {
+    return res.json();
+  })
+  .then(data => {
+    console.log(data);
+    let html;
+    data.tracks.items.forEach(track => {
+      html = `
+        <div class="track">
+          <p>${track.track.name}</p>
+          <p>${track.track.artists[0].name}</p>
+          <p>${track.track.album.name}</p>
+        </div>
+      `;
+      queue.insertAdjacentHTML('beforeend', html)
+    });
 
+  })
+  .catch(err=> console.log(err));
 }
-
 
 
 function playSong() {
@@ -190,8 +219,11 @@ function pauseSong() {
 }
 
 function addToQueue(e) {
+
+  console.log(e.currentTarget);
+  let track = e.currentTarget;
   let uri = e.currentTarget.parentElement.id;
-  let url = `https://api.spotify.com/v1/me/player/queue?uri=${uri}`;
+  let url = `https://api.spotify.com/v1/me/player/queue?uri=${uri}&device_id=d50fd3b81745b41a7c8892f55e4682740f9e8136`;
   fetch(`${baseUrl}/add-to-queue`, {
     method: 'POST',
     headers: {
@@ -203,7 +235,9 @@ function addToQueue(e) {
     return res.json();
   })
   .then(data => {
-    console.log(data)
+    console.log(data);
+
+    track.innerText = 'Added!';
   })
   .catch(err=> console.log(err));
 }
