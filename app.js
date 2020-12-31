@@ -9,6 +9,7 @@ const secret = '9e07afeec7354865b085e4405a0a8e55';
 const redirect_uri = 'http://localhost:8080/callback/';
 // const redirect_uri = 'https://spotify-dc-app.herokuapp.com/callback/';
 let refresh_token = '';
+let scopes = 'user-read-private user-read-email user-read-currently-playing user-modify-playback-state user-read-playback-state playlist-modify-public';
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,7 +30,7 @@ app.get('/', function (req, res, next) {
 app.get('/login', function (req, res, next) {
   if (res.statusCode === 200) {
     res.writeHead(302, {
-      Location: `https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=code&redirect_uri=${redirect_uri}&scope=user-read-private user-read-email user-read-currently-playing user-modify-playback-state user-read-playback-state`
+      Location: `https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=code&redirect_uri=${redirect_uri}&scope=${scopes}`
     });
     res.send();
   } else {
@@ -181,6 +182,18 @@ app.post('/get-playlist', function(req, res) {
 
 
 // add to REQ playlist
+app.post('/add-to-playlist', function(req, res) {
+  let url = req.body.url;
+
+  if (res.statusCode === 200) {
+
+    spotifyAuthAndRefreshData(refresh_token, url, 'POST', res);
+
+  } else {
+    res.status(404);
+  }
+
+});
 
 
 
