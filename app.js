@@ -6,8 +6,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const client_id = '170a54b9cf114d8fa1b61666ab9af230';
 const secret = '9e07afeec7354865b085e4405a0a8e55';
-const redirect_uri = 'http://localhost:8080/callback/';
-// const redirect_uri = 'https://spotify-dc-app.herokuapp.com/callback/';
+// const redirect_uri = 'http://localhost:8080/callback/';
+const redirect_uri = 'https://spotify-dc-app.herokuapp.com/callback/';
 let refresh_token = '';
 let scopes = 'user-read-private user-read-email user-read-currently-playing user-modify-playback-state user-read-playback-state playlist-modify-public';
 

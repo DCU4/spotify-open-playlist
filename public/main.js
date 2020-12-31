@@ -6,8 +6,8 @@ let queue = document.querySelector('#queue');
 let firstTrack;
 let isPlaying = false;
 let controls = document.querySelector('#controls');
-let baseUrl = 'http://localhost:8080';
-// let baseUrl = 'https://spotify-dc-app.herokuapp.com'
+// let baseUrl = 'http://localhost:8080';
+let baseUrl = 'https://spotify-dc-app.herokuapp.com'
 
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -271,7 +271,7 @@ function addToPlaylist(e) {
     `;
     firstTrack = document.querySelector('#queue .track');
     firstTrack.insertAdjacentHTML('beforebegin', html);
-    
+
   })
   .catch(err=> console.log(err));
 }
