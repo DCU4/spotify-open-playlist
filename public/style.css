@@ -19,7 +19,7 @@ h4 {
 }
 
 .box {
-  padding: 40px;
+  padding: 0px 40px 20px;
   margin-bottom: 20px;
   border: 1px solid #DDD;
   border-radius: 5px;
@@ -28,19 +28,34 @@ h4 {
 .track {
   display: flex;
   justify-content: space-between;
-  margin: 10px 0;
+  align-items: center;
+  margin: 0px 0 20px;
+  padding: 0 0 20px;
+  border-bottom: 1px solid #DDD;
 }
 
-.track p {
-  margin: 10px 0 ;
+.track p,
+.track .track-info  {
+  flex: 1;
 }
 
-.playing-now {
-  margin-top: 20px;
+.track .track-info .song {
+  font-weight: bold;
 }
 
-#currently-playing,
+.track .add-to-queue {
+  text-align: right;
+}
+
+#queue,
 #search-box {
-  height: 200px;
-  overflow: scroll;
+  height: 250px;
+  overflow: scroll
+}
+
+.title {
+  background: linear-gradient(0deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,1) 40%);
+  position: sticky;
+  top: 0;
+  padding: 20px 0 10px;
 }
