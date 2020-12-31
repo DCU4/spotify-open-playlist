@@ -3,6 +3,7 @@ let searchForm = document.querySelector('#search-form');
 let results = document.querySelector('#search-results');
 let currentlyPlaying = document.querySelector('#currently-playing');
 let queue = document.querySelector('#queue');
+let firstTrack;
 let isPlaying = false;
 let controls = document.querySelector('#controls');
 let baseUrl = 'http://localhost:8080';
@@ -76,8 +77,9 @@ function searchSpotify(searchTerm) {
       html = `
         <div id="${track.uri}" class="track">
         <div class="track-info">
-          <p>${track.name}</p>
-          <p>${track.artists[0].name}</p>
+          <p class="song">${track.name}</p>
+          <p class="artist">${track.artists[0].name}</p>
+          <p class="album">${track.album.name}</p>
         </div>
         <p class="add-to-queue">Add to Queue</p>
         </div>
@@ -90,9 +92,8 @@ function searchSpotify(searchTerm) {
     let addToQueueBtns = document.querySelectorAll('.add-to-queue');
     addToQueueBtns.forEach(btn => {
       btn.addEventListener('click', addToQueue);
+      btn.addEventListener('click', addToPlaylist);
     });
-
-  // TODO: add song to REQ playlist
 
     
   })
@@ -164,6 +165,7 @@ function getPlaylist() {
   .then(data => {
     console.log(data);
     let html;
+    data.tracks.items.reverse();
     data.tracks.items.forEach(track => {
       html = `
         <div class="track">
@@ -175,6 +177,7 @@ function getPlaylist() {
       queue.insertAdjacentHTML('beforeend', html)
     });
 
+    firstTrack = document.querySelector('#queue .track');
   })
   .catch(err=> console.log(err));
 }
@@ -238,6 +241,37 @@ function addToQueue(e) {
     console.log(data);
 
     track.innerText = 'Added!';
+  })
+  .catch(err=> console.log(err));
+}
+
+
+function addToPlaylist(e) {
+  let track = e.currentTarget.parentElement;
+  let song = track.querySelector('.song').innerText;
+  let artist = track.querySelector('.artist').innerText;
+  let album = track.querySelector('.album').innerText;
+  let uri = e.currentTarget.parentElement.id;
+  let url = `https://api.spotify.com/v1/playlists/4wh4DEEfm4QqLYXn3E5G0s/tracks?uris=${uri}`;
+  fetch(`${baseUrl}/add-to-playlist`, {
+    method: 'POST',
+    headers: {
+      "Content-Type":'application/json'
+    },
+    body: JSON.stringify({url:url})
+  })
+  .then(res => {
+
+    let html = `
+      <div class="track">
+        <p>${song}</p>
+        <p>${artist}</p>
+        <p>${album}</p>
+      </div>
+    `;
+    firstTrack = document.querySelector('#queue .track');
+    firstTrack.insertAdjacentHTML('beforebegin', html);
+    
   })
   .catch(err=> console.log(err));
 }
