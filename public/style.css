@@ -81,12 +81,16 @@ h4 {
   main {
     width: 90%;
   }
+  .wrapper {
+    height: 90vh;
+  }
   .box {
     padding: 0px 20px 20px;
   }
   .grid {
     grid-template-columns: 1fr;
-    grid-template-rows: 150px 450px 450px;
+    grid-template-rows: 150px 1fr 1fr;
+    height: 100%;
   }
   #search-box {
     grid-column: 1;
