@@ -71,3 +71,14 @@ h4 {
   top: 0;
   padding: 20px 0 10px;
 }
+
+@media all and (max-width:720px) {
+  .grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 150px 450px 450px;
+  }
+  #search-box {
+    grid-column: 1;
+    grid-row: 3;
+  }
+}
