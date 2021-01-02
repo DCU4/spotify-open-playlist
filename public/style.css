@@ -6,6 +6,7 @@
 
 body {
   font-family: 'Avenir', sans-serif;
+  transition: all .5s ease;
 }
 
 main {
@@ -16,6 +17,20 @@ main {
 h4 {
   text-align: center;
   margin-bottom: 20px;
+  transition: all .5s ease;
+}
+strong {
+  transition: all .5s ease;
+}
+
+button.dark-toggle {
+  position: absolute;
+  top: 5px; 
+  right: 5px;
+  background: none;
+  border: none;
+  color: #121212;
+  transition: all .5s ease;
 }
 
 .grid {
@@ -27,9 +42,10 @@ h4 {
 
 .box {
   padding: 0px 40px 20px;
-  /* margin-bottom: 20px; */
   border: 1px solid #DDD;
   border-radius: 5px;
+  background: transparent;
+  transition: all .5s ease;
 }
 
 .track {
@@ -45,10 +61,12 @@ h4 {
 .track .track-info  {
   flex: 1;
   margin-bottom: 5px;
+  transition: all .5s ease;
 }
 
 #queue .track p {
   margin-bottom: 0;
+  transition: all .5s ease;
 }
 
 .track .track-info .song {
@@ -71,10 +89,32 @@ h4 {
 }
 
 .title {
-  background: linear-gradient(0deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,1) 40%);
+  background: #FFF;
   position: sticky;
   top: 0;
   padding: 20px 0 10px;
+  transition: all .3s ease;
+}
+
+
+.dark-mode {
+  background: #121212;
+}
+
+.dark-mode .dark-toggle,
+.dark-mode p,
+.dark-mode strong,
+.dark-mode h4 {
+  color: #EEE;
+}
+
+.dark-mode .title {
+  background: #2a2a2a;
+}
+.dark-mode .box {
+  border: none;
+  background: #2a2a2a;
+
 }
 
 @media all and (max-width:720px) {

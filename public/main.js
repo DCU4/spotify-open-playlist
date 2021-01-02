@@ -6,8 +6,9 @@ let queue = document.querySelector('#queue');
 let firstTrack;
 let isPlaying = false;
 let controls = document.querySelector('#controls');
-// let baseUrl = 'http://localhost:8080';
-let baseUrl = 'https://spotify-dc-app.herokuapp.com'
+let baseUrl = 'http://localhost:8080';
+// let baseUrl = 'https://spotify-dc-app.herokuapp.com';
+let darkModeBtn = document.querySelector('.dark-toggle');
 
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -20,6 +21,21 @@ window.onload = () => {
   getCurrentlyPlaying();
   getPlaylist();
 }
+
+darkModeBtn.addEventListener('click', ()=> {
+  document.body.classList.toggle('dark-mode');
+  if (darkModeBtn.innerText == 'Light Mode') {
+    darkModeBtn.innerText = 'Dark Mode';
+  } else {
+    darkModeBtn.innerText = 'Light Mode';
+  }
+  // let titles = document.querySelectorAll('.title');
+  // titles.forEach(title => {
+  //   setTimeout(()=>{
+  //     title.classList.toggle('dark-mode');
+  //   },1000)
+  // })
+})
 
 
 // controls.addEventListener('click', () => {
