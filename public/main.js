@@ -29,12 +29,6 @@ darkModeBtn.addEventListener('click', ()=> {
   } else {
     darkModeBtn.innerText = 'Light Mode';
   }
-  // let titles = document.querySelectorAll('.title');
-  // titles.forEach(title => {
-  //   setTimeout(()=>{
-  //     title.classList.toggle('dark-mode');
-  //   },1000)
-  // })
 })
 
 
