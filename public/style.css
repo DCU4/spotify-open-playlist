@@ -44,6 +44,11 @@ h4 {
 .track p,
 .track .track-info  {
   flex: 1;
+  margin-bottom: 5px;
+}
+
+#queue .track p {
+  margin-bottom: 0;
 }
 
 .track .track-info .song {
@@ -73,6 +78,12 @@ h4 {
 }
 
 @media all and (max-width:720px) {
+  main {
+    width: 90%;
+  }
+  .box {
+    padding: 0px 20px 20px;
+  }
   .grid {
     grid-template-columns: 1fr;
     grid-template-rows: 150px 450px 450px;
