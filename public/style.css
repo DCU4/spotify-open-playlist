@@ -16,7 +16,7 @@ main {
 
 h4 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   transition: all .5s ease;
 }
 strong {
@@ -33,19 +33,27 @@ button.dark-toggle {
   transition: all .5s ease;
 }
 
+.wrapper {
+  position: relative;
+  z-index: 100;
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 150px 450px;
   gap: 30px;
 }
-
 .box {
   padding: 0px 40px 20px;
   border: 1px solid #DDD;
   border-radius: 5px;
-  background: transparent;
+  background: #082b3a;
   transition: all .5s ease;
+  box-shadow:  
+    20px 20px 60px #072531, 
+    -20px -20px 60px #093143;
+  /* background: rgba(255,255,255,.9) */
 }
 
 .track {
@@ -54,7 +62,15 @@ button.dark-toggle {
   align-items: center;
   margin: 0px 0 20px;
   padding: 0 0 20px;
-  border-bottom: 1px solid #DDD;
+  /* border-bottom: 1px solid #DDD; */
+  opacity: 0;
+  /* transform: translateY(10px);
+  transition: all .2s ease-in .5s; */
+  animation: fade-in .5s ease forwards;
+}
+.track.loaded {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .track p,
@@ -89,9 +105,11 @@ button.dark-toggle {
 }
 
 .title {
-  background: #FFF;
+  /* background: #FFF; */
+  background: #082b3a;
   position: sticky;
   top: 0;
+  z-index: 10;
   padding: 20px 0 10px;
   transition: all .3s ease;
 }
@@ -109,11 +127,11 @@ button.dark-toggle {
 }
 
 .dark-mode .title {
-  background: #2a2a2a;
+  /* background: #2a2a2a; */
 }
 .dark-mode .box {
   border: none;
-  background: #2a2a2a;
+  /* background: #2a2a2a; */
 
 }
 
@@ -135,5 +153,20 @@ button.dark-toggle {
   #search-box {
     grid-column: 1;
     grid-row: 3;
+  }
+}
+
+.canvas {
+  position: fixed;
+  top:0;
+  left: 0;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

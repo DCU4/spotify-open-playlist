@@ -9,11 +9,12 @@
 
 </head>
 
-<body id="body">
+<body id="body" class="dark-mode">
 
   <main>
-  <button style="display:none" class="dark-toggle">Dark Mode</button>
+    <button style="display:none" class="dark-toggle">Dark Mode</button>
     <div class="wrapper">
+
       <h4>This is REQ</h4>
       <div class="grid">
         <div class="box" id="currently-playing">
@@ -22,7 +23,7 @@
             <strong>Currently Playing</strong>
           </div>
         </div>
-        
+
         <div class="box" id="queue">
           <div class="title">
             <strong>Next Up</strong>
@@ -40,8 +41,12 @@
         </div>
       </div>
     </div>
-
+    <div class="canvas"></div>
   </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/PixiPlugin.min.js"></script> -->
+  <script src="/three.js"></script>
+  <script src="/particles.js"></script>
   <script src="/main.js"></script>
 </body>
 

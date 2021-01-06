@@ -10,6 +10,8 @@ let controls = document.querySelector('#controls');
 let baseUrl = 'https://spotify-dc-app.herokuapp.com';
 let darkModeBtn = document.querySelector('.dark-toggle');
 
+// import 'particlesJS';
+
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   let searchTerm = searchForm.querySelector('input').value;
@@ -21,7 +23,11 @@ window.onload = () => {
   getCurrentlyPlaying();
   getPlaylist();
 }
-
+/* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
+// particlesJS.load('particles-js', '/particles.json', function() {
+//   console.log('callback - particles.js config loaded');
+// });
+// console.log(particlesJS)
 darkModeBtn.addEventListener('click', ()=> {
   document.body.classList.toggle('dark-mode');
   if (darkModeBtn.innerText == 'Light Mode') {
@@ -105,6 +111,8 @@ function searchSpotify(searchTerm) {
       btn.addEventListener('click', addToPlaylist);
     });
 
+    loadTracks(results)
+
     
   })
   .catch(err=> console.log(err));
@@ -176,7 +184,7 @@ function getPlaylist() {
     console.log(data);
     let html;
     data.tracks.items.reverse();
-    data.tracks.items.forEach(track => {
+    data.tracks.items.forEach((track,i) => {
       html = `
         <div class="track">
           <p>${track.track.name}</p>
@@ -184,10 +192,12 @@ function getPlaylist() {
           <p>${track.track.album.name}</p>
         </div>
       `;
-      queue.insertAdjacentHTML('beforeend', html)
+      queue.insertAdjacentHTML('beforeend', html);
     });
 
     firstTrack = document.querySelector('#queue .track');
+
+    loadTracks(queue);
   })
   .catch(err=> console.log(err));
 }
@@ -281,7 +291,18 @@ function addToPlaylist(e) {
     `;
     firstTrack = document.querySelector('#queue .track');
     firstTrack.insertAdjacentHTML('beforebegin', html);
-
+    loadTracks(queue);
   })
   .catch(err=> console.log(err));
+}
+
+
+
+function loadTracks(parent) {
+  let tracks = parent.querySelectorAll('.track');
+  tracks.forEach((t,i) => {
+    setTimeout(()=> {
+      t.classList.add('loaded');
+    }, 2+i)
+  });
 }
