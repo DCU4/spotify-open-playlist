@@ -6,8 +6,8 @@ let queue = document.querySelector('#queue');
 let firstTrack;
 let isPlaying = false;
 let controls = document.querySelector('#controls');
-// let baseUrl = 'http://localhost:8080';
-let baseUrl = 'https://spotify-dc-app.herokuapp.com';
+let baseUrl = 'http://localhost:8080';
+// let baseUrl = 'https://spotify-dc-app.herokuapp.com';
 let darkModeBtn = document.querySelector('.dark-toggle');
 
 // import 'particlesJS';
@@ -28,7 +28,7 @@ window.onload = () => {
 //   console.log('callback - particles.js config loaded');
 // });
 // console.log(particlesJS)
-darkModeBtn.addEventListener('click', ()=> {
+darkModeBtn.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
   if (darkModeBtn.innerText == 'Light Mode') {
     darkModeBtn.innerText = 'Dark Mode';
@@ -56,17 +56,17 @@ recognition.interimResults = false;
 recognition.continuous = true;
 // recognition.start();
 
-recognition.onresult = function(event) {
-  
-  var searchTerm = event.results[event.results.length-1][0].transcript.replace(' ', '');
+recognition.onresult = function (event) {
+
+  var searchTerm = event.results[event.results.length - 1][0].transcript.replace(' ', '');
   console.log(event.results)
-  if (searchTerm == 'play'){
+  if (searchTerm == 'play') {
     playSong();
     controls.innerText = 'Pause';
-  } else if (searchTerm == 'pause'){
+  } else if (searchTerm == 'pause') {
     pauseSong();
     controls.innerText = 'Play';
-  }else {
+  } else {
     searchSpotify(searchTerm)
   }
 }
@@ -75,22 +75,22 @@ recognition.onresult = function(event) {
 // functions
 function searchSpotify(searchTerm) {
 
-  fetch(`${baseUrl}/search`,{
+  fetch(`${baseUrl}/search`, {
     method: 'POST',
     headers: {
-      "Content-Type":'application/json'
+      "Content-Type": 'application/json'
     },
-    body: JSON.stringify({search:searchTerm})
+    body: JSON.stringify({ search: searchTerm })
   })
-  .then(res=> {
-    return res.json()
-  })
-  .then(data => {
-    console.log(data);
-    let html = '';
-    results.innerText = '';
-    data.tracks.items.forEach(track => {
-      html = `
+    .then(res => {
+      return res.json()
+    })
+    .then(data => {
+      console.log(data);
+      let html = '';
+      results.innerText = '';
+      data.tracks.items.forEach(track => {
+        html = `
         <div id="${track.uri}" class="track">
         <div class="track-info">
           <p class="song">${track.name}</p>
@@ -100,71 +100,71 @@ function searchSpotify(searchTerm) {
         <p class="add-to-queue">Add to Queue</p>
         </div>
       `;
-      results.insertAdjacentHTML('beforeend', html)
-    });
+        results.insertAdjacentHTML('beforeend', html)
+      });
 
 
-    // click event to add song to queue
-    let addToQueueBtns = document.querySelectorAll('.add-to-queue');
-    addToQueueBtns.forEach(btn => {
-      btn.addEventListener('click', addToQueue);
-      btn.addEventListener('click', addToPlaylist);
-    });
+      // click event to add song to queue
+      let addToQueueBtns = document.querySelectorAll('.add-to-queue');
+      addToQueueBtns.forEach(btn => {
+        btn.addEventListener('click', addToQueue);
+        btn.addEventListener('click', addToPlaylist);
+      });
 
-    loadTracks(results)
+      loadTracks(results)
 
-    
-  })
-  .catch(err=> console.log(err));
+
+    })
+    .catch(err => console.log(err));
 }
 
-
+let currentlyPlayingSong;
 function getCurrentlyPlaying() {
   let url = 'https://api.spotify.com/v1/me/player/currently-playing?market=US'
   fetch(`${baseUrl}/currently-playing`, {
     method: 'POST',
     headers: {
-      "Content-Type":'application/json'
+      "Content-Type": 'application/json'
     },
-    body: JSON.stringify({url:url})
+    body: JSON.stringify({ url: url })
   })
-  .then(res => {
-    return res.json();
-  })
-  .then(data => {
-    console.log(data)
-    let html;
-
-    if (data != ''){
-      html = `
-        <div class="playing-now">
+    .then(res => {
+      return res.json();
+    })
+    .then(data => {
+      console.log(data);
+      let html;
+      if (data != '') {
+        currentlyPlayingSong = data.item.uri;
+        html = `
+        <div id="${data.item.uri}" class="playing-now">
           <p>${data.item.name}</p>
           <p>${data.item.artists[0].name}</p>
           <p>${data.item.album.name}</p>
         </div>
       `;
 
-      isPlaying = data.is_playing;
-    } else {
-      html = `
+        isPlaying = data.is_playing;
+      } else {
+        html = `
         <div class="playing-now">
           <p>Nothing playing currently</p>
         </div>
       `;
-      isPlaying = false;
-    }
+        isPlaying = false;
+      }
 
-    currentlyPlaying.insertAdjacentHTML('beforeend', html);
+      currentlyPlaying.insertAdjacentHTML('beforeend', html);
 
-    // if (isPlaying) {
-    //   controls.innerText = 'Pause';
-    // } else {
-    //   controls.innerText = 'Play';
-    // }
+      // if (isPlaying) {
+      //   controls.innerText = 'Pause';
+      // } else {
+      //   controls.innerText = 'Play';
+      // }
 
-  })
-  .catch(err=> console.log(err));
-  
+    })
+    .catch(err => console.log(err));
+
 }
 
 
@@ -173,33 +173,33 @@ function getPlaylist() {
   fetch(`${baseUrl}/get-playlist`, {
     method: 'POST',
     headers: {
-      "Content-Type":'application/json'
+      "Content-Type": 'application/json'
     },
-    body: JSON.stringify({url:url})
+    body: JSON.stringify({ url: url })
   })
-  .then(res => {
-    return res.json();
-  })
-  .then(data => {
-    console.log(data);
-    let html;
-    data.tracks.items.reverse();
-    data.tracks.items.forEach((track,i) => {
-      html = `
-        <div class="track">
+    .then(res => {
+      return res.json();
+    })
+    .then(data => {
+      console.log(data);
+      let html;
+      // data.tracks.items.reverse();
+      data.tracks.items.forEach((track, i) => {
+        html = `
+        <div id="${track.track.uri}" class="track">
           <p>${track.track.name}</p>
           <p>${track.track.artists[0].name}</p>
           <p>${track.track.album.name}</p>
         </div>
       `;
-      queue.insertAdjacentHTML('beforeend', html);
-    });
+        queue.insertAdjacentHTML('beforeend', html);
+      });
 
-    firstTrack = document.querySelector('#queue .track');
+      firstTrack = document.querySelector('#queue .track');
 
-    loadTracks(queue);
-  })
-  .catch(err=> console.log(err));
+      loadTracks(queue);
+    })
+    .catch(err => console.log(err));
 }
 
 
@@ -208,18 +208,18 @@ function playSong() {
   fetch(`${baseUrl}/play`, {
     method: 'POST',
     headers: {
-      "Content-Type":'application/json'
+      "Content-Type": 'application/json'
     },
-    body: JSON.stringify({url:url})
+    body: JSON.stringify({ url: url })
   })
-  .then(res => {
-    return res.json();
-  })
-  .then(data => {
-    console.log(data)
-    isPlaying = true;
-  })
-  .catch(err=> console.log(err));
+    .then(res => {
+      return res.json();
+    })
+    .then(data => {
+      console.log(data)
+      isPlaying = true;
+    })
+    .catch(err => console.log(err));
 }
 
 function pauseSong() {
@@ -227,18 +227,18 @@ function pauseSong() {
   fetch(`${baseUrl}/pause`, {
     method: 'POST',
     headers: {
-      "Content-Type":'application/json'
+      "Content-Type": 'application/json'
     },
-    body: JSON.stringify({url:url})
+    body: JSON.stringify({ url: url })
   })
-  .then(res => {
-    return res.json();
-  })
-  .then(data => {
-    console.log(data)
-    isPlaying = false;
-  })
-  .catch(err=> console.log(err));
+    .then(res => {
+      return res.json();
+    })
+    .then(data => {
+      console.log(data)
+      isPlaying = false;
+    })
+    .catch(err => console.log(err));
 }
 
 function addToQueue(e) {
@@ -250,19 +250,19 @@ function addToQueue(e) {
   fetch(`${baseUrl}/add-to-queue`, {
     method: 'POST',
     headers: {
-      "Content-Type":'application/json'
+      "Content-Type": 'application/json'
     },
-    body: JSON.stringify({url:url})
+    body: JSON.stringify({ url: url })
   })
-  .then(res => {
-    return res.json();
-  })
-  .then(data => {
-    console.log(data);
+    .then(res => {
+      return res.json();
+    })
+    .then(data => {
+      console.log(data);
 
-    track.innerText = 'Added!';
-  })
-  .catch(err=> console.log(err));
+      track.innerText = 'Added!';
+    })
+    .catch(err => console.log(err));
 }
 
 
@@ -276,33 +276,51 @@ function addToPlaylist(e) {
   fetch(`${baseUrl}/add-to-playlist`, {
     method: 'POST',
     headers: {
-      "Content-Type":'application/json'
+      "Content-Type": 'application/json'
     },
-    body: JSON.stringify({url:url})
+    body: JSON.stringify({ url: url })
   })
-  .then(res => {
+    .then(res => {
 
-    let html = `
+      let html = `
       <div class="track">
         <p>${song}</p>
         <p>${artist}</p>
         <p>${album}</p>
       </div>
     `;
-    firstTrack = document.querySelector('#queue .track');
-    firstTrack.insertAdjacentHTML('beforebegin', html);
-    loadTracks(queue);
+      // queue = document.querySelector('#queue .track');
+      queue.insertAdjacentHTML('beforeend', html);
+      loadTracks(queue);
+    })
+    .catch(err => console.log(err));
+}
+
+function deleteFromPlaylist() {
+  // let uri = e.currentTarget.parentElement.id;
+  let url = `https://api.spotify.com/v1/playlists/4wh4DEEfm4QqLYXn3E5G0s/tracks?uris=${currentlyPlayingSong}`;
+  fetch(`${baseUrl}/add-to-playlist`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": 'application/json'
+    },
+    body: JSON.stringify({ url: url })
   })
-  .catch(err=> console.log(err));
+    .then(res => {
+
+      // queue.insertAdjacentHTML('beforeend', html);
+
+    })
+    .catch(err => console.log(err));
 }
 
 
 
 function loadTracks(parent) {
   let tracks = parent.querySelectorAll('.track');
-  tracks.forEach((t,i) => {
-    setTimeout(()=> {
+  tracks.forEach((t, i) => {
+    setTimeout(() => {
       t.classList.add('loaded');
-    }, 2+i)
+    }, (i * 50) + 100)
   });
 }
