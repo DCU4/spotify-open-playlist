@@ -89,15 +89,15 @@ function searchSpotify(searchTerm) {
       console.log(data);
       let html = '';
       results.innerText = '';
+      // <p class="album">${track.album.name}</p>
       data.tracks.items.forEach(track => {
         html = `
-        <div id="${track.uri}" class="track">
-        <div class="track-info">
-          <p class="song">${track.name}</p>
-          <p class="artist">${track.artists[0].name}</p>
-          <p class="album">${track.album.name}</p>
-        </div>
-        <p class="add-to-queue">Add to Queue</p>
+        <div id="${track.uri}" class="result track">
+          <div class="track-info">
+            <p class="song">${track.name}</p>
+            <p class="artist">${track.artists[0].name}</p>
+          </div>
+          <p class="add-to-queue">Add to Queue</p>
         </div>
       `;
         results.insertAdjacentHTML('beforeend', html)
@@ -184,12 +184,16 @@ function getPlaylist() {
       console.log(data);
       let html;
       // data.tracks.items.reverse();
+
+      // <p>${track.track.album.name}</p>
       data.tracks.items.forEach((track, i) => {
         html = `
         <div id="${track.track.uri}" class="track">
-          <p>${track.track.name}</p>
-          <p>${track.track.artists[0].name}</p>
-          <p>${track.track.album.name}</p>
+          <img src="${track.track.album.images[0].url}" />
+          <div class="track-info">
+            <p>${track.track.name}</p>
+            <p>${track.track.artists[0].name}</p>
+          </div>
         </div>
       `;
         queue.insertAdjacentHTML('beforeend', html);
