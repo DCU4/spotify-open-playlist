@@ -1,5 +1,5 @@
 var scene = new THREE.Scene();
-scene.background = new THREE.Color( 0x082b3a );
+scene.background = new THREE.Color( 0x121212 );
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 var mouseX;
 var mouseY;
@@ -18,10 +18,10 @@ window.addEventListener("resize", function() {
 var distance = Math.min(200, window.innerWidth / 2 );
 var geometry = new THREE.Geometry();
 
-var particles = new THREE.Points(geometry, new THREE.PointsMaterial({color: 0xf41b1b, size: 1}));
+var particles = new THREE.Points(geometry, new THREE.PointsMaterial({color: 0xffffff, size: 1}));
 // particles.boundingSphere = 5000;
 
-for (var i = 0; i < 5000; i++) {
+for (var i = 0; i < 1000; i++) {
 
   var vertex = new THREE.Vector3();
 
