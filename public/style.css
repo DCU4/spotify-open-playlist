@@ -7,6 +7,7 @@
 body {
   font-family: 'Avenir', sans-serif;
   transition: all .5s ease;
+  font-size: 16px;
 }
 
 main {
@@ -14,7 +15,8 @@ main {
   margin: 30px auto;
 }
 
-h4 {
+h3, h4 {
+  color: #FFF;
   text-align: center;
   margin-bottom: 30px;
   transition: all .5s ease;
@@ -52,11 +54,11 @@ button.dark-toggle {
   padding: 0px 40px 20px;
   border: 1px solid #DDD;
   border-radius: 5px;
-  background: #082b3a;
+  background: #121212;
   transition: all .5s ease;
   box-shadow:  
-    20px 20px 60px #072531, 
-    -20px -20px 60px #093143;
+    20px 20px 60px #121212, 
+    -20px -20px 60px #121212;
 }
 
 .track {
@@ -130,7 +132,7 @@ button.dark-toggle {
 }
 
 .title {
-  background: #082b3a;
+  background: #121212;
   position: sticky;
   top: 0;
   z-index: 10;
