@@ -1,8 +1,7 @@
 'use strict';
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors')
-const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
 const client_id = '170a54b9cf114d8fa1b61666ab9af230';
 const secret = '9e07afeec7354865b085e4405a0a8e55';
@@ -12,8 +11,8 @@ let refresh_token = '';
 let scopes = 'user-read-private user-read-email user-read-currently-playing user-modify-playback-state user-read-playback-state playlist-modify-public';
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
