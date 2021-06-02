@@ -2,6 +2,7 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const fs = require('fs');
 const app = express();
 let refresh_token = '';
 let scopes = 'user-read-private user-read-email user-read-currently-playing user-modify-playback-state user-read-playback-state playlist-modify-public';
