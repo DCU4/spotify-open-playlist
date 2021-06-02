@@ -183,7 +183,7 @@ function getPlaylist() {
     .then(data => {
       console.log(data);
       let html;
-      // data.tracks.items.reverse();
+      data.tracks.items.reverse();
 
       // <p>${track.track.album.name}</p>
       data.tracks.items.forEach((track, i) => {
@@ -274,7 +274,6 @@ function addToPlaylist(e) {
   let track = e.currentTarget.parentElement;
   let song = track.querySelector('.song').innerText;
   let artist = track.querySelector('.artist').innerText;
-  let album = track.querySelector('.album').innerText;
   let uri = e.currentTarget.parentElement.id;
   let url = `https://api.spotify.com/v1/playlists/4wh4DEEfm4QqLYXn3E5G0s/tracks?uris=${uri}`;
   fetch(`${baseUrl}/add-to-playlist`, {
@@ -285,12 +284,10 @@ function addToPlaylist(e) {
     body: JSON.stringify({ url: url })
   })
     .then(res => {
-
       let html = `
       <div class="track">
         <p>${song}</p>
         <p>${artist}</p>
-        <p>${album}</p>
       </div>
     `;
       // queue = document.querySelector('#queue .track');
