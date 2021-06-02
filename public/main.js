@@ -1,4 +1,3 @@
-console.log('main.js');
 let searchForm = document.querySelector('#search-form');
 let results = document.querySelector('#search-results');
 let currentlyPlaying = document.querySelector('#currently-playing');
@@ -9,8 +8,6 @@ let controls = document.querySelector('#controls');
 // let baseUrl = 'http://localhost:8080';
 let baseUrl = 'https://spotify-dc-app.herokuapp.com';
 let darkModeBtn = document.querySelector('.dark-toggle');
-
-// import 'particlesJS';
 
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -23,11 +20,7 @@ window.onload = () => {
   getCurrentlyPlaying();
   getPlaylist();
 }
-/* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
-// particlesJS.load('particles-js', '/particles.json', function() {
-//   console.log('callback - particles.js config loaded');
-// });
-// console.log(particlesJS)
+
 darkModeBtn.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
   if (darkModeBtn.innerText == 'Light Mode') {
@@ -86,13 +79,12 @@ function searchSpotify(searchTerm) {
       return res.json()
     })
     .then(data => {
-      console.log(data);
       let html = '';
       results.innerText = '';
-      // <p class="album">${track.album.name}</p>
       data.tracks.items.forEach(track => {
         html = `
         <div id="${track.uri}" class="result track">
+          <img class="album" src="${track.album.images[0].url}" />
           <div class="track-info">
             <p class="song">${track.name}</p>
             <p class="artist">${track.artists[0].name}</p>
@@ -100,6 +92,7 @@ function searchSpotify(searchTerm) {
           <p class="add-to-queue">Add to Queue</p>
         </div>
       `;
+
         results.insertAdjacentHTML('beforeend', html)
       });
 
@@ -134,7 +127,7 @@ function getCurrentlyPlaying() {
     .then(data => {
       console.log(data);
       let html;
-      if (data != '') {
+      if (data != '' && data.item) {
         currentlyPlayingSong = data.item.uri;
         html = `
         <div id="${data.item.uri}" class="playing-now">
@@ -246,9 +239,8 @@ function pauseSong() {
 }
 
 function addToQueue(e) {
-
-  console.log(e.currentTarget);
   let track = e.currentTarget;
+  track.innerText = 'Added!';
   let uri = e.currentTarget.parentElement.id;
   let url = `https://api.spotify.com/v1/me/player/queue?uri=${uri}&device_id=d50fd3b81745b41a7c8892f55e4682740f9e8136`;
   fetch(`${baseUrl}/add-to-queue`, {
@@ -258,20 +250,16 @@ function addToQueue(e) {
     },
     body: JSON.stringify({ url: url })
   })
-    .then(res => {
-      return res.json();
-    })
-    .then(data => {
-      console.log(data);
-
-      track.innerText = 'Added!';
-    })
-    .catch(err => console.log(err));
+  .then(res => {
+    res.json();   
+  })
+  .catch(err => console.log(err));
 }
 
 
 function addToPlaylist(e) {
   let track = e.currentTarget.parentElement;
+  let album = track.querySelector('.album').src;
   let song = track.querySelector('.song').innerText;
   let artist = track.querySelector('.artist').innerText;
   let uri = e.currentTarget.parentElement.id;
@@ -285,13 +273,15 @@ function addToPlaylist(e) {
   })
     .then(res => {
       let html = `
-      <div class="track">
-        <p>${song}</p>
-        <p>${artist}</p>
+      <div id="${uri}" class="track">
+        <img src="${album}" />
+        <div class="track-info">
+          <p>${song}</p>
+          <p>${artist}</p>
+        </div>
       </div>
     `;
-      // queue = document.querySelector('#queue .track');
-      queue.insertAdjacentHTML('beforeend', html);
+      queue.querySelector('.title').insertAdjacentHTML('afterend', html);
       loadTracks(queue);
     })
     .catch(err => console.log(err));
