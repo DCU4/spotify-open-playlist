@@ -3,12 +3,16 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const app = express();
-const client_id = '170a54b9cf114d8fa1b61666ab9af230';
-const secret = '9e07afeec7354865b085e4405a0a8e55';
-const redirect_uri = 'http://localhost:8080/callback/';
-// const redirect_uri = 'https://spotify-dc-app.herokuapp.com/callback/';
 let refresh_token = '';
 let scopes = 'user-read-private user-read-email user-read-currently-playing user-modify-playback-state user-read-playback-state playlist-modify-public';
+let credentials;
+if (fs.existsSync('./credentials.json')) {
+  credentials = require('./credentials.json');
+}
+const secret = process.env.secret ? process.env.secret : credentials.secret;
+const client_id = process.env.client_id ? process.env.client_id : credentials.client_id;
+const redirect_uri = process.env.secret ? 'https://spotify-dc-app.herokuapp.com/callback/' : 'http://localhost:8080/callback/';
+
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
