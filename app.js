@@ -14,6 +14,7 @@ const secret = process.env.secret ? process.env.secret : credentials.secret;
 const client_id = process.env.client_id ? process.env.client_id : credentials.client_id;
 const redirect_uri = process.env.secret ? 'https://spotify-dc-app.herokuapp.com/callback/' : 'http://localhost:8080/callback/';
 
+// app.locals.spotifyData = '';
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -262,6 +263,7 @@ function spotifyAuthAndRefreshData(refresh_token, url, method, res) {
         spotifyAPICall(token, url, method)
           .then(data => {
             res.json(data.data);
+            // app.locals.spotifyData = data;
           })
           .catch(err => console.log('spotify err', err));
       })
@@ -276,6 +278,7 @@ function spotifyAuthAndRefreshData(refresh_token, url, method, res) {
         spotifyAPICall(token, url, method)
           .then(data => {
             res.json(data.data);
+            // app.locals.spotifyData = data;
           })
           .catch(err => console.log('spotify err', err));
       })
@@ -288,7 +291,7 @@ function spotifyAuthAndRefreshData(refresh_token, url, method, res) {
 
 // authenticate with spotify
 async function authenticate() {
-  const btoa = (data) => Buffer.from(data).toString('base64');
+  
   const auth = {
     method: 'POST',
     url: 'https://accounts.spotify.com/api/token?grant_type=client_credentials',
