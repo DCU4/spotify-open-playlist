@@ -49,6 +49,10 @@ if(SpeechRecognition && recognition){
   recognition.continuous = true;
   recognition.start();
 
+  recognition.onstart = event => {
+    console.log('start', event);
+   }
+
   recognition.onresult = function (event) {
 
     let searchTerm = event.results[event.results.length - 1][0].transcript.replace(' ', '');
@@ -66,7 +70,7 @@ if(SpeechRecognition && recognition){
 
   recognition.onend = event => { 
     console.log('end', event);
-    recognition.start();
+    // recognition.start();
   }
 
 } else {
