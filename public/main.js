@@ -48,6 +48,7 @@ if(SpeechRecognition && recognition){
   recognition.lang = 'en-US';
   recognition.interimResults = false;
   recognition.continuous = true;
+  console.log(recognition);
   recognition.start();
 
   recognition.onstart = event => {
