@@ -43,31 +43,35 @@ darkModeBtn.addEventListener('click', () => {
 // voice event for search
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
-recognition.lang = 'en-US';
-recognition.interimResults = false;
-recognition.continuous = true;
-recognition.start();
-
-recognition.onresult = function (event) {
-
-  let searchTerm = event.results[event.results.length - 1][0].transcript.replace(' ', '');
-  console.log(event.results)
-  if (searchTerm == 'play') {
-    playSong();
-    controls.innerText = 'Pause';
-  } else if (searchTerm == 'pause') {
-    pauseSong();
-    controls.innerText = 'Play';
-  } else {
-    searchSpotify(searchTerm)
-  }
-}
-
-recognition.onend = event => { 
-  console.log('end', event);
+if(SpeechRecognition && recognition){
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.continuous = true;
   recognition.start();
-}
 
+  recognition.onresult = function (event) {
+
+    let searchTerm = event.results[event.results.length - 1][0].transcript.replace(' ', '');
+    console.log(event.results)
+    if (searchTerm == 'play') {
+      playSong();
+      controls.innerText = 'Pause';
+    } else if (searchTerm == 'pause') {
+      pauseSong();
+      controls.innerText = 'Play';
+    } else {
+      searchSpotify(searchTerm)
+    }
+  }
+
+  recognition.onend = event => { 
+    console.log('end', event);
+    recognition.start();
+  }
+
+} else {
+  console.log('no recognition');
+}
 
 // functions
 function searchSpotify(searchTerm) {
