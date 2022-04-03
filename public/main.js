@@ -6,8 +6,8 @@ const controls = document.querySelector('#controls');
 const darkModeBtn = document.querySelector('.dark-toggle');
 let firstTrack;
 let isPlaying = false;
-let baseUrl = 'http://localhost:8080';
-// let baseUrl = 'https://spotify-dc-app.herokuapp.com';
+// let baseUrl = 'http://localhost:8080';
+let baseUrl = 'https://spotify-dc-app.herokuapp.com';
 
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
