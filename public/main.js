@@ -1,19 +1,18 @@
-let searchForm = document.querySelector('#search-form');
-let results = document.querySelector('#search-results');
-let currentlyPlaying = document.querySelector('#currently-playing');
-let queue = document.querySelector('#queue');
+const searchForm = document.querySelector('#search-form');
+const results = document.querySelector('#search-results');
+const currentlyPlaying = document.querySelector('#currently-playing');
+const queue = document.querySelector('#queue');
+const controls = document.querySelector('#controls');
+const darkModeBtn = document.querySelector('.dark-toggle');
 let firstTrack;
 let isPlaying = false;
-let controls = document.querySelector('#controls');
-// let baseUrl = 'http://localhost:8080';
-let baseUrl = 'https://spotify-dc-app.herokuapp.com';
-let darkModeBtn = document.querySelector('.dark-toggle');
+let baseUrl = 'http://localhost:8080';
+// let baseUrl = 'https://spotify-dc-app.herokuapp.com';
 
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  let searchTerm = searchForm.querySelector('input').value;
+  const searchTerm = searchForm.querySelector('input').value;
   searchSpotify(searchTerm)
-
 });
 
 window.onload = () => {
@@ -47,11 +46,11 @@ const recognition = new SpeechRecognition();
 recognition.lang = 'en-US';
 recognition.interimResults = false;
 recognition.continuous = true;
-// recognition.start();
+recognition.start();
 
 recognition.onresult = function (event) {
 
-  var searchTerm = event.results[event.results.length - 1][0].transcript.replace(' ', '');
+  let searchTerm = event.results[event.results.length - 1][0].transcript.replace(' ', '');
   console.log(event.results)
   if (searchTerm == 'play') {
     playSong();
@@ -62,6 +61,11 @@ recognition.onresult = function (event) {
   } else {
     searchSpotify(searchTerm)
   }
+}
+
+recognition.onend = event => { 
+  console.log('end', event);
+  recognition.start();
 }
 
 
@@ -98,7 +102,7 @@ function searchSpotify(searchTerm) {
 
 
       // click event to add song to queue
-      let addToQueueBtns = document.querySelectorAll('.add-to-queue');
+      const addToQueueBtns = document.querySelectorAll('.add-to-queue');
       addToQueueBtns.forEach(btn => {
         btn.addEventListener('click', addToQueue);
         btn.addEventListener('click', addToPlaylist);
@@ -113,7 +117,7 @@ function searchSpotify(searchTerm) {
 
 let currentlyPlayingSong;
 function getCurrentlyPlaying() {
-  let url = 'https://api.spotify.com/v1/me/player/currently-playing?market=US'
+  const url = 'https://api.spotify.com/v1/me/player/currently-playing?market=US'
   fetch(`${baseUrl}/currently-playing`, {
     method: 'POST',
     headers: {
@@ -147,13 +151,11 @@ function getCurrentlyPlaying() {
         isPlaying = false;
       }
 
+      const playingRn = currentlyPlaying.querySelector('.playing-now');
+      if (playingRn){
+        currentlyPlaying.removeChild(playingRn);
+      }
       currentlyPlaying.insertAdjacentHTML('beforeend', html);
-
-      // if (isPlaying) {
-      //   controls.innerText = 'Pause';
-      // } else {
-      //   controls.innerText = 'Play';
-      // }
 
     })
     .catch(err => console.log(err));
@@ -162,7 +164,7 @@ function getCurrentlyPlaying() {
 
 
 function getPlaylist() {
-  let url = 'https://api.spotify.com/v1/playlists/4wh4DEEfm4QqLYXn3E5G0s';
+  const url = 'https://api.spotify.com/v1/playlists/4wh4DEEfm4QqLYXn3E5G0s';
   fetch(`${baseUrl}/get-playlist`, {
     method: 'POST',
     headers: {
@@ -201,7 +203,7 @@ function getPlaylist() {
 
 
 function playSong() {
-  let url = 'https://api.spotify.com/v1/me/player/play';
+  const url = 'https://api.spotify.com/v1/me/player/play';
   fetch(`${baseUrl}/play`, {
     method: 'POST',
     headers: {
@@ -215,12 +217,13 @@ function playSong() {
     .then(data => {
       console.log(data)
       isPlaying = true;
+      getCurrentlyPlaying();
     })
     .catch(err => console.log(err));
 }
 
 function pauseSong() {
-  let url = 'https://api.spotify.com/v1/me/player/pause';
+  const url = 'https://api.spotify.com/v1/me/player/pause';
   fetch(`${baseUrl}/pause`, {
     method: 'POST',
     headers: {
@@ -239,10 +242,10 @@ function pauseSong() {
 }
 
 function addToQueue(e) {
-  let track = e.currentTarget;
+  const track = e.currentTarget;
   track.innerText = 'Added!';
-  let uri = e.currentTarget.parentElement.id;
-  let url = `https://api.spotify.com/v1/me/player/queue?uri=${uri}&device_id=d50fd3b81745b41a7c8892f55e4682740f9e8136`;
+  const uri = e.currentTarget.parentElement.id;
+  const url = `https://api.spotify.com/v1/me/player/queue?uri=${uri}&device_id=d50fd3b81745b41a7c8892f55e4682740f9e8136`;
   fetch(`${baseUrl}/add-to-queue`, {
     method: 'POST',
     headers: {
@@ -258,12 +261,12 @@ function addToQueue(e) {
 
 
 function addToPlaylist(e) {
-  let track = e.currentTarget.parentElement;
-  let album = track.querySelector('.album').src;
-  let song = track.querySelector('.song').innerText;
-  let artist = track.querySelector('.artist').innerText;
-  let uri = e.currentTarget.parentElement.id;
-  let url = `https://api.spotify.com/v1/playlists/4wh4DEEfm4QqLYXn3E5G0s/tracks?uris=${uri}`;
+  const track = e.currentTarget.parentElement;
+  const album = track.querySelector('.album').src;
+  const song = track.querySelector('.song').innerText;
+  const artist = track.querySelector('.artist').innerText;
+  const uri = e.currentTarget.parentElement.id;
+  const url = `https://api.spotify.com/v1/playlists/4wh4DEEfm4QqLYXn3E5G0s/tracks?uris=${uri}`;
   fetch(`${baseUrl}/add-to-playlist`, {
     method: 'POST',
     headers: {
@@ -289,7 +292,7 @@ function addToPlaylist(e) {
 
 function deleteFromPlaylist() {
   // let uri = e.currentTarget.parentElement.id;
-  let url = `https://api.spotify.com/v1/playlists/4wh4DEEfm4QqLYXn3E5G0s/tracks?uris=${currentlyPlayingSong}`;
+  const url = `https://api.spotify.com/v1/playlists/4wh4DEEfm4QqLYXn3E5G0s/tracks?uris=${currentlyPlayingSong}`;
   fetch(`${baseUrl}/add-to-playlist`, {
     method: 'POST',
     headers: {
@@ -308,7 +311,7 @@ function deleteFromPlaylist() {
 
 
 function loadTracks(parent) {
-  let tracks = parent.querySelectorAll('.track');
+  const tracks = parent.querySelectorAll('.track');
   tracks.forEach((t, i) => {
     setTimeout(() => {
       t.classList.add('loaded');
