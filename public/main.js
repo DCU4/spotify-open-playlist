@@ -42,7 +42,8 @@ darkModeBtn.addEventListener('click', () => {
 
 // voice event for search
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
+const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+
 if(SpeechRecognition && recognition){
   recognition.lang = 'en-US';
   recognition.interimResults = false;
