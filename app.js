@@ -22,8 +22,7 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-
-app.get('/', function (req, res, next) {
+app.get('/player', function (req, res, next) {
   if (res.statusCode === 200) {
     res.render('index');
   } else {
@@ -32,7 +31,7 @@ app.get('/', function (req, res, next) {
 });
 
 
-app.get('/login', function (req, res, next) {
+app.get('/', function (req, res, next) {
   if (res.statusCode === 200) {
     res.writeHead(302, {
       Location: `https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=code&redirect_uri=${redirect_uri}&scope=${scopes}`
@@ -291,7 +290,7 @@ function spotifyAuthAndRefreshData(refresh_token, url, method, res) {
 
 // authenticate with spotify
 async function authenticate() {
-  
+  const btoa = (data) => Buffer.from(data).toString('base64');
   const auth = {
     method: 'POST',
     url: 'https://accounts.spotify.com/api/token?grant_type=client_credentials',
