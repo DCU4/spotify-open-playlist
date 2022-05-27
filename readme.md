@@ -11,4 +11,4 @@ This is built with Node.js using the Spotify API. Currently you are able to:
 
 Check it out for yourself!
 
-https://spotify-dc-app.herokuapp.com/login
+https://spotify-dc-app.herokuapp.com/
