@@ -9,6 +9,3 @@ This is built with Node.js using the Spotify API. Currently you are able to:
  - View the current song I am listening to
  - See the full open playlist
 
-Check it out for yourself!
-
-https://spotify-dc-app.herokuapp.com/
